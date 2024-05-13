@@ -10,7 +10,7 @@ jobs:
     - name: Build Module
       shell: pwsh
       run: |
-        $repo_name = Read-Host "Please enter your new repo name"
+        $repo_name = "Read-Host"
         gh repo create $repo_name --private --template=${GITHUB_REPOSITORY#*/CRUD} --include-all-branches
         echo "exiting in 10 seconds"
         Start-Sleep -s 10
