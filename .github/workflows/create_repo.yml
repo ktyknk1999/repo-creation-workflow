@@ -11,7 +11,7 @@ jobs:
       shell: pwsh
       run: |
         $repo_name = "test_repo_1"
-        gh repo create $repo_name --private --template=CRUD --include-all-branches
+        gh repo create $repo_name --private --template=https://github.com/ktyknk1999/CRUD --include-all-branches
         echo "exiting in 10 seconds"
         Start-Sleep -s 10
 
