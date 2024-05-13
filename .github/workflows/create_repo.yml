@@ -10,7 +10,7 @@ jobs:
     - name: Build Module
       shell: pwsh
       run: |
-        $repo_name = Get-Content ktyknk1999/repo-creation-workflow/repo_name.txt
+        $repo_name = "test_repo_1"
         gh repo create $repo_name --private --template=CRUD --include-all-branches
         echo "exiting in 10 seconds"
         Start-Sleep -s 10
