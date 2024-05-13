@@ -11,7 +11,7 @@ jobs:
       shell: pwsh
       run: |
         $repo_name = Read-Host "Please enter your new repo name"
-        gh repo create $repo_name --private --template=git@github.com:ktyknk1999/CRUD.git --include-all-branches
+        gh repo create $repo_name --private --template=${GITHUB_REPOSITORY#*/CRUD} --include-all-branches
         echo "exiting in 10 seconds"
         Start-Sleep -s 10
 
