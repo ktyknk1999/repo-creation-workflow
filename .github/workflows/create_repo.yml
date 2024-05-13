@@ -10,7 +10,7 @@ jobs:
     - name: Build Module
       shell: pwsh
       run: |
-        $repo_name = Read-Host "Please enter your new repo name"
+        $repo_name = Get-Content ktyknk1999/repo-creation-workflow/repo_name.txt
         gh repo create $repo_name --private --template=CRUD --include-all-branches
         echo "exiting in 10 seconds"
         Start-Sleep -s 10
