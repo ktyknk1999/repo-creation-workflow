@@ -24,7 +24,7 @@ jobs:
     #   run: echo "${{ steps.package.outputs.content }}"
     - name: Set ENV variables
       run: |
-        $REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+        $REPO_NAME=${CRUD#$ktyknk1999/}" 
   
     - name: Use the custom ENV variable
       run: |
