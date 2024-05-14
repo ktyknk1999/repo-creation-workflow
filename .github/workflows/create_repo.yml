@@ -7,13 +7,21 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-    - name: Build Module
-      shell: pwsh
-      run: |
-        $repo_name = "Read-Host"
-        gh repo create $repo_name --private --template=CRUD --include-all-branches
-        echo "exiting in 10 seconds"
-        Start-Sleep -s 10
+    # - name: Build Module
+    #   shell: pwsh
+    #   run: |
+    #     $repo_name = "Read-Host"
+    #     gh repo create $repo_name --private --template=CRUD --include-all-branches
+    #     echo "exiting in 10 seconds"
+    #     Start-Sleep -s 10
+    - name: Read repo_name.txt
+      id: package
+      uses: jaywcjlove/github-action-read-file@main
+      with:
+        path: repo_name.txt
+    
+    - name: Echo repo_name.txt
+      run: echo "${{ steps.package.outputs.content }}"
 
 
 
