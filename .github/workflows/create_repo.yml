@@ -7,10 +7,14 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-    - name: Build Module
-      shell: pwsh
-      run: |
-            ./create_repo.ps1
+      - uses: actions/checkout@v1
+      - name: Script
+        run: .\create_repo.ps1
+        shell: powershell
+    # - name: Build Module
+    #   shell: pwsh
+    #   run: |
+    #         ./create_repo.ps1
     #     $repo_name = "Read-Host"
     #     gh repo create $repo_name --private --template=ktyknk1999/CRUD --include-all-branches
     #     echo "exiting in 10 seconds"
