@@ -45,7 +45,7 @@ on:
   workflow_dispatch:
     inputs:
       repo-name: 
-        description: 'New_Repo_1'
+        description: 'Name of the repository to be created'
         required: true
         default: ''
 
