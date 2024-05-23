@@ -28,6 +28,7 @@ jobs:
             -d '{"name": "'"$REPO_NAME"'","private":true}'
 
           NEW_REPO_FULL_NAME=$(echo "$RESPONSE" | jq -r '.full_name')
+          echo $NEW_REPO_FULL_NAME
           DEFAULT_BRANCH_SHA=$(git ls-remote https://github.com/${{ github.repository }} refs/heads/main | cut -f1)
          
           IFS=',' read -ra BRANCH_LIST <<< "$BRANCHES"
