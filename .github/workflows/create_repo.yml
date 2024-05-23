@@ -1,28 +1,28 @@
-# on:
-#   workflow_dispatch:
+on:
+  workflow_dispatch:
 
-# jobs:
-#   build:
-#     runs-on: windows-latest
-#     env:
-#       GH_TOKEN: ${{ github.token }}
-#     steps:
-#       - uses: actions/checkout@v1
-#       - name: Script
-#         run: .\create_repo.ps1
-#         shell: powershell
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Script
+        run: .\create_repo.ps1
+        shell: powershell
 
 
 
         
-#     # - name: Build Module
-#     #   shell: pwsh
-#     #   run: |
-#     #         ./create_repo.ps1
-#     #     $repo_name = "Read-Host"
-#     #     gh repo create $repo_name --private --template=ktyknk1999/CRUD --include-all-branches
-#     #     echo "exiting in 10 seconds"
-#     #     Start-Sleep -s 10
+      - name: Build Module
+        shell: pwsh
+        run: |
+            ./create_repo.ps1
+            $repo_name = "Read-Host"
+            gh repo create $repo_name --private 
+            echo "exiting in 10 seconds"
+            Start-Sleep -s 10
 #     # - name: Read repo_name.txt
 #     #   id: package
 #     #   uses: jaywcjlove/github-action-read-file@main
@@ -40,30 +40,30 @@
 #     #     echo $REPO_NAME
 
 
-name: Create Repo
-on: 
-  workflow_dispatch:
-    inputs:
-      repo-name: 
-        description: 'Name of the repository to be created'
-        required: true
-        default: ''
+# name: Create Repo
+# on: 
+#   workflow_dispatch:
+#     inputs:
+#       repo-name: 
+#         description: 'Name of the repository to be created'
+#         required: true
+#         default: ''
 
-jobs:
-  create-repository:
-    runs-on: ubuntu-latest
-    name: Creating Organization Repository
-    steps:
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-      - name: Creating GitHub Organization Repository
-        uses: repo-ctrl/create-repo-action@main 
-        id: create-repo
-        with:
-          repo-name: '${{ github.event.inputs.repo-name }}'
-          org-admin-token: '${{ secrets.ORG_ADMIN_TOKEN }}'
-      - name: Log URL to the repo
-        run: echo "The new repo is ${{ steps.create-repo.outputs.repo-url }}"
+# jobs:
+#   create-repository:
+#     runs-on: ubuntu-latest
+#     name: Creating Organization Repository
+#     steps:
+#       - name: Use Node.js
+#         uses: actions/setup-node@v2
+#       - name: Creating GitHub Organization Repository
+#         uses: repo-ctrl/create-repo-action@main 
+#         id: create-repo
+#         with:
+#           repo-name: '${{ github.event.inputs.repo-name }}'
+#           org-admin-token: '${{ secrets.ORG_ADMIN_TOKEN }}'
+#       - name: Log URL to the repo
+#         run: echo "The new repo is ${{ steps.create-repo.outputs.repo-url }}"
 
 
 
