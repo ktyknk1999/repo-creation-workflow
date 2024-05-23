@@ -33,14 +33,14 @@ jobs:
             curl -X POST \
               -H "Authorization: token ${{ secrets.API_TOKEN }}" \
               -H "Accept: application/vnd.github.v3+json" \
-              -d "{\"ref\": \"refs/heads/$branch\"}" \
-              "https://api.github.com/repos/${{ github.repository }}/git/refs"
+              https://api.github.com/repos/${{ github.repository }}/git/refs \
+              -d "{\"ref\": \"refs/heads/$branch\"}" 
           done
-      - name: Create README.md
-        run: |
-          git config --global user.name "${{ secrets.USERNAME }}"
-          git config --global user.email "${{ secrets.EMAIL }}"
-          echo "# $REPO_NAME" >> README.md
-          git add README.md
-          git commit -m "Add README.md"
-          git push origin main
+      # - name: Create README.md
+      #   run: |
+      #     git config --global user.name "${{ secrets.USERNAME }}"
+      #     git config --global user.email "${{ secrets.EMAIL }}"
+      #     echo "# $REPO_NAME" >> README.md
+      #     git add README.md
+      #     git commit -m "Add README.md"
+      #     git push origin main
