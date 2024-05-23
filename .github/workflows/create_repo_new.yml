@@ -15,7 +15,7 @@ jobs:
           REPO_NAME="new-repository-using-api"
           TEMPLATE_OWNER="ktyknk1999"
           TEMPLATE_REPO="CRUD"
-          ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          ACCESS_TOKEN="${{ secrets.API_TOKEN }}"
           
           
           curl -X POST \
