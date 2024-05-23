@@ -27,6 +27,18 @@ jobs:
             https://api.github.com/user/repos \
             -d '{"name": "'"$REPO_NAME"'","private":true}'
 
+          sleep 10
+
+          curl -X PUT -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/README.md \
+          -d @- <<EOF
+          {
+            "message": "Add README.md",
+            "content": "$(echo -n '# New Repo from Template' | base64)"
+          }
+          EOF
+          
           NEW_REPO_FULL_NAME=$(echo "$RESPONSE" | jq -r '.full_name')
           echo $NEW_REPO_FULL_NAME
           DEFAULT_BRANCH_SHA=$(git ls-remote https://github.com/${{ github.repository }} refs/heads/main | cut -f1)
