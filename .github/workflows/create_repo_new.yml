@@ -26,6 +26,9 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/user/repos \
             -d '{"name": "'"$REPO_NAME"'","private":true}'
+            
+          DEFAULT_BRANCH=$(echo "$RESPONSE" | jq -r '.default_branch')
+          DEFAULT_BRANCH_SHA=$(git ls-remote https://github.com/${{ github.repository }} refs/heads/$DEFAULT_BRANCH | cut -f1)
           
           IFS=',' read -ra BRANCH_LIST <<< "$BRANCHES"
           for branch in "${BRANCH_LIST[@]}"; do
