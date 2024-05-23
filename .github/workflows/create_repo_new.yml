@@ -36,3 +36,9 @@ jobs:
               -d "{\"ref\": \"refs/heads/$branch\"}" \
               "https://api.github.com/repos/${{ github.repository }}/git/refs"
           done
+      - name: Create README.md
+        run: |
+          echo "# $REPO_NAME" >> README.md
+          git add README.md
+          git commit -m "Add README.md"
+          git push origin main
