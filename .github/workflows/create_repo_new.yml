@@ -12,14 +12,9 @@ jobs:
 
       - name: Create Repository from Template
         run: |
-          REPO_NAME="new-repository-using-api"
-          TEMPLATE_OWNER="ktyknk1999"
-          TEMPLATE_REPO="CRUD"
-          ACCESS_TOKEN="${{ secrets.API_TOKEN }}"
-          
-          
+          REPO_NAME="your-repository-name"
           curl -X POST \
-            -H "Authorization: token $ACCESS_TOKEN" \
-            -H "Accept: application/vnd.github.baptiste-preview+json" \
-            https://api.github.com/repos/$TEMPLATE_OWNER/$TEMPLATE_REPO/generate \
-            -d "{\"owner\":\"$GITHUB_REPOSITORY\", \"name\":\"$REPO_NAME\",\"private\":\"true\"}"
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/user/repos \
+            -d '{"name": "'"$REPO_NAME"'"}'
