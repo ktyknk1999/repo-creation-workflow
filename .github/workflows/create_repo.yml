@@ -8,9 +8,9 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v1
-      - name: Script
-        run: .\create_repo.ps1
-        shell: powershell
+      # - name: Script
+      #   run: .\create_repo.ps1
+      #   shell: powershell
 
 
 
@@ -18,7 +18,7 @@ jobs:
       - name: Build Module
         shell: pwsh
         run: |
-            ./create_repo.ps1
+         
             $repo_name = "Read-Host"
             gh repo create $repo_name --private 
             echo "exiting in 10 seconds"
