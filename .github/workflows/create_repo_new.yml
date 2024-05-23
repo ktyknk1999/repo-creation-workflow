@@ -1,0 +1,25 @@
+name: Create Repository from Template
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create_repository:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create Repository from Template
+        run: |
+          REPO_NAME="new-repository-using-api"
+          TEMPLATE_OWNER="ktyknk1999"
+          TEMPLATE_REPO="CRUD"
+          ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          
+          # Create repository from template
+          curl -X POST \
+            -H "Authorization: token $ACCESS_TOKEN" \
+            -H "Accept: application/vnd.github.baptiste-preview+json" \
+            https://api.github.com/repos/$TEMPLATE_OWNER/$TEMPLATE_REPO/generate \
+            -d "{\"owner\":\"$GITHUB_REPOSITORY\", \"name\":\"$REPO_NAME\",\"private\":\"true\"}"
