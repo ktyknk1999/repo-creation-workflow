@@ -27,9 +27,7 @@ jobs:
             https://api.github.com/user/repos \
             -d '{"name": "'"$REPO_NAME"'","private":true}'
             
-          DEFAULT_BRANCH=$(echo "$RESPONSE" | jq -r '.default_branch')
-          DEFAULT_BRANCH_SHA=$(git ls-remote https://github.com/${{ github.repository }} refs/heads/$DEFAULT_BRANCH | cut -f1)
-          
+         
           IFS=',' read -ra BRANCH_LIST <<< "$BRANCHES"
           for branch in "${BRANCH_LIST[@]}"; do
             
@@ -37,7 +35,7 @@ jobs:
               -H "Authorization: token ${{ secrets.API_TOKEN }}" \
               -H "Accept: application/vnd.github.v3+json" \
               https://api.github.com/repos/${{ github.repository }}/git/refs \
-              -d "{\"ref\": \"refs/heads/$branch\", \"sha\": \"$DEFAULT_BRANCH_SHA\"}" 
+              -d "{\"ref\": \"refs/heads/$branch\", \"sha\": \"${{ secrets.API_TOKEN }}\"}" 
           done
       # - name: Create README.md
       #   run: |
