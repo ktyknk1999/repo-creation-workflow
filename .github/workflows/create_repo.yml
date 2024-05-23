@@ -16,13 +16,13 @@ jobs:
 
         
       - name: Build Module
-        shell: pwsh
-        run: |
+        # shell: pwsh
+        run: curl https://api.github.com/users/repos -d '{"name":"reponame","description":"new repo","private":"true"}'
          
-            $repo_name = "Read-Host"
-            gh repo create $repo_name --private 
-            echo "exiting in 10 seconds"
-            Start-Sleep -s 10
+            # $repo_name = "Read-Host"
+            # gh repo create $repo_name --private 
+            # echo "exiting in 10 seconds"
+            # Start-Sleep -s 10
 #     # - name: Read repo_name.txt
 #     #   id: package
 #     #   uses: jaywcjlove/github-action-read-file@main
