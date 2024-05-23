@@ -17,7 +17,7 @@ jobs:
           TEMPLATE_REPO="CRUD"
           ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           
-          # Create repository from template
+          
           curl -X POST \
             -H "Authorization: token $ACCESS_TOKEN" \
             -H "Accept: application/vnd.github.baptiste-preview+json" \
