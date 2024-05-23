@@ -60,11 +60,4 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME \
             -d '{"private": true}'
-      # - name: Create README.md
-      #   run: |
-      #     git config --global user.name "${{ secrets.USERNAME }}"
-      #     git config --global user.email "${{ secrets.EMAIL }}"
-      #     echo "# $REPO_NAME" >> README.md
-      #     git add README.md
-      #     git commit -m "Add README.md"
-      #     git push origin main
+    
