@@ -40,7 +40,7 @@ jobs:
                 -H "Authorization: token ${{ secrets.API_TOKEN }}" \
                 -H "Accept: application/vnd.github.v3+json" \
                -d "{\"ref\": \"refs/heads/$branch_name\", \"sha\": \"$DEFAULT_BRANCH_SHA\"}" \
-                "https://api.github.com/repos/$NEW_REPO_FULL_NAME/git/refs" 
+                "https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/git/refs" 
             fi
           done
       # - name: Create README.md
