@@ -1,7 +1,11 @@
-name: Create Repository from Template
+name: Create Repository without template
 
 on:
   workflow_dispatch:
+    inputs:
+      repository_name:
+        description: 'Enter the name of the new repository'
+        required: true
 
 jobs:
   create_repository:
@@ -12,9 +16,9 @@ jobs:
 
       - name: Create Repository from Template
         run: |
-          REPO_NAME="your-repository-name"
+          REPO_NAME="${{ github.event.inputs.repository_name }}"
           curl -X POST \
             -H "Authorization: token ${{ secrets.API_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/user/repos \
-            -d '{"name": "'"$REPO_NAME"'"}'
+            -d '{"name": "'"$REPO_NAME"'","private":true}'
