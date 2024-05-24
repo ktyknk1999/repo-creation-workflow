@@ -39,8 +39,6 @@ jobs:
           }
           EOF
           
-          NEW_REPO_FULL_NAME=$(echo "$RESPONSE" | jq -r '.full_name')
-          echo $NEW_REPO_FULL_NAME
           DEFAULT_BRANCH_SHA=$(git ls-remote https://github.com/${{ secrets.username }}/$REPO_NAME refs/heads/main | cut -f1)
          
           IFS=',' read -ra BRANCH_LIST <<< "$BRANCHES"
