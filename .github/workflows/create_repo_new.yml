@@ -31,8 +31,7 @@ jobs:
 
           sleep 10
 
-      - name: Create README.md 
-        run: |
+      
           curl -X PUT -H "Authorization: token ${{ secrets.API_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/README.md \
@@ -44,8 +43,7 @@ jobs:
           EOF
           
 
-      - name: Adding required branches 
-        run: |
+      
           DEFAULT_BRANCH_SHA=$(git ls-remote https://github.com/${{ secrets.username }}/$REPO_NAME refs/heads/main | cut -f1)
          
           IFS=',' read -ra BRANCH_LIST <<< "$BRANCHES"
@@ -62,8 +60,7 @@ jobs:
           done
 
 
-      - name: Making Prod as a default branch 
-        run: |
+      
           README_SHA=$(curl -s -H "Authorization: token ${{ secrets.API_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/README.md?ref=main" | jq -r .sha)
@@ -94,8 +91,7 @@ jobs:
             https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/git/refs/heads/main
 
 
-      - name: Setting Visibility to Private
-        run: |
+      
 
           curl -X PATCH \
             -H "Authorization: token ${{ secrets.API_TOKEN }}" \
