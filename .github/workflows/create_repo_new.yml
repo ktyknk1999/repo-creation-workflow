@@ -7,7 +7,7 @@ on:
         description: 'Enter the name of the new repository'
         required: true
       description:
-        description: 'Enter the names of the branches (comma-separated)'
+        description: 'Description'
         required: true
 
 jobs:
