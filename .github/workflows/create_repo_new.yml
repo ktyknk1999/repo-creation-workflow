@@ -26,7 +26,7 @@ jobs:
             -H "Authorization: token ${{ secrets.API_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/user/repos \
-            -d '{"name": "'"$REPO_NAME"'","private":false,"description": "'"$DESCRIPTION"'","default_branch":"Prod"}'
+            -d '{"name": "'"$REPO_NAME"'","private":false,"description": "'"$DESCRIPTION"'",\"default_branch\": \"Prod\"}'
 
           sleep 10
 
