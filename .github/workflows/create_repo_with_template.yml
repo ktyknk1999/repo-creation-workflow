@@ -23,7 +23,7 @@ jobs:
             -H "Authorization: token ${{ secrets.API_TOKEN }}" \
             -H "Accept: application/vnd.github.baptiste-preview+json" \
             https://api.github.com/repos/${{ secrets.USERNAME }}/CRUD/generate \
-            -d '{"name": "'"$REPO_NAME"'","private":true}'
+            -d '{"name": "'"$REPO_NAME"'","private":false}'
 
             curl -X PUT \
             -H "Authorization: token ${{ secrets.API_TOKEN }}" \
