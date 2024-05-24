@@ -6,7 +6,7 @@ on:
       repository_name:
         description: 'Enter the name of the new repository'
         required: true
-      branches:
+      description:
         description: 'Enter the names of the branches (comma-separated)'
         required: true
 
@@ -20,12 +20,13 @@ jobs:
       - name: Create Repository 
         run: |
           REPO_NAME="${{ github.event.inputs.repository_name }}"
-          BRANCHES="${{ github.event.inputs.branches }}"
+          DESCRIPTION="${{ github.event.inputs.description }}"
+          BRANCHES="Prod,qa,dev"
           curl -X POST \
             -H "Authorization: token ${{ secrets.API_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/user/repos \
-            -d '{"name": "'"$REPO_NAME"'","private":false}'
+            -d '{"name": "'"$REPO_NAME"'","private":false,"description": "'"$DESCRIPTION"'","default_branch":"Prod"}'
 
           sleep 10
 
