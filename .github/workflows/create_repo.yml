@@ -21,9 +21,9 @@ jobs:
         run: |
           # Set variables from GitHub event inputs
           REPO_NAME="${{ github.event.inputs.repository_name }}"
-          BRANCHES="${{ github.event.inputs.branches }}"
+          BRANCHES="qa,dev"
           DEFAULT_BRANCH="prod"  # Setting default branch to "prod"
-          WORKFLOW_FILES="${{ github.event.inputs.workflow_files }}"  # Comma-separated list of workflow files
+          WORKFLOW_FILES="demo_workflow_file1.yml,demo_workflow_file2.yml,demo_workflow_file3.yml"  # Comma-separated list of workflow files
           
           # Create a new public repository
           curl -X POST \
