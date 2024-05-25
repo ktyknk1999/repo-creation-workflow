@@ -1,4 +1,4 @@
-name: Create Repository without template
+name: Create Repository w/o template 
 
 on:
   workflow_dispatch:
