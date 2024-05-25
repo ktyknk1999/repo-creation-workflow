@@ -91,13 +91,7 @@ jobs:
             https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/git/refs/heads/main
 
 
-      
 
-          curl -X PATCH \
-            -H "Authorization: token ${{ secrets.API_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME \
-            -d '{"private": true}'
 
           WORKFLOW_FILES="demo_workflow_file1.yml,demo_workflow_file2.yml,demo_workflow_file3.yml"
 
@@ -127,3 +121,13 @@ jobs:
               EOF
           done
     
+
+      
+
+          curl -X PATCH \
+            -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME \
+            -d '{"private": true}'
+
+          
