@@ -1,0 +1,169 @@
+name: Create Repository from Template
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: 'Name of the repository to create'
+        required: true
+      description:
+        description: 'Description'
+        required: true
+      
+jobs:
+  create-repo:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up variables
+      id: setup-vars
+      run: |
+        echo "REPO_NAME=${{ github.event.inputs.repository_name }}" >> $GITHUB_ENV
+        echo "BRANCHES='"qa,dev"'" >> $GITHUB_ENV
+        echo "WORKFLOW_FILES='"demo_workflow_file1.yml,demo_workflow_file2.yml,demo_workflow_file3.yml"'" >> $GITHUB_ENV
+
+    - name: Create repository
+      id: create-repo
+      run: |
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/user/repos \
+          -d '{"name": "'"$REPO_NAME"'","private":false,"description":"${{ github.event.inputs.description }}"}'
+        sleep 10
+
+    - name: Add README.md to main branch
+      run: |
+        curl -X PUT -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/README.md \
+          -d @- <<EOF
+        {
+          "message": "Add README.md",
+          "content": "$(echo -n '# New Repo from Template' | base64)"
+        }
+        EOF
+
+    - name: Get default branch SHA
+      id: get-sha
+      run: |
+        DEFAULT_BRANCH_SHA=$(git ls-remote https://github.com/${{ secrets.username }}/$REPO_NAME refs/heads/main | cut -f1)
+        echo "DEFAULT_BRANCH_SHA=${DEFAULT_BRANCH_SHA}" >> $GITHUB_ENV
+
+    - name: Create additional branches
+      run: |
+        IFS=',' read -ra BRANCH_LIST <<< "$BRANCHES"
+        for branch in "${BRANCH_LIST[@]}"; do
+          branch_name="$(echo -e "${branch}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          
+          if [ -n "$branch_name" ]; then
+            curl -X POST \
+              -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+             -d "{\"ref\": \"refs/heads/$branch_name\", \"sha\": \"$DEFAULT_BRANCH_SHA\"}" \
+              "https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/git/refs"
+          fi
+        done
+
+    - name: Create prod branch
+      run: |
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+         -d "{\"ref\": \"refs/heads/prod\", \"sha\": \"$DEFAULT_BRANCH_SHA\"}" \
+          "https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/git/refs"
+
+    - name: Copy README.md to prod branch
+      run: |
+        README_SHA=$(curl -s -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/README.md?ref=main" | jq -r .sha)
+        
+        curl -X PUT -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/README.md \
+          -d @- <<EOF
+        {
+          "message": "Copy README.md to prod",
+          "content": "$(echo -n '# New Repo from Template' | base64)",
+          "branch": "prod",
+          "sha": "$README_SHA"
+        }
+        EOF
+
+    - name: Copy workflow files to prod branch
+      run: |
+        IFS=',' read -ra WORKFLOW_LIST <<< "$WORKFLOW_FILES"
+        for workflow_file in "${WORKFLOW_LIST[@]}"; do
+          workflow_file="$(echo -e "${workflow_file}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          
+          workflow_content=$(curl -s -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/.github/workflows/$workflow_file?ref=main")
+        
+          workflow_sha=$(echo "$workflow_content" | jq -r .sha)
+          workflow_encoded_content=$(echo "$workflow_content" | jq -r .content)
+        
+          curl -X PUT -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/.github/workflows/$workflow_file \
+            -d @- <<EOF
+        {
+          "message": "Copy $workflow_file to prod",
+          "content": "$workflow_encoded_content",
+          "branch": "prod",
+          "sha": "$workflow_sha"
+        }
+        EOF
+        done
+
+    - name: Set branch protection rules
+      run: |
+        IFS=',' read -ra BRANCH_LIST <<< "$BRANCHES"
+        for branch in "${BRANCH_LIST[@]}"; do
+          branch_name="$(echo -e "${branch}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          
+          if [ -n "$branch_name" ]; then
+            curl -X PUT \
+              -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/branches/$branch_name/protection \
+              -d @- <<EOF
+        {
+          "required_status_checks": {
+            "strict": true,
+            "contexts": []
+          },
+          "enforce_admins": true,
+          "required_pull_request_reviews": {
+            "dismiss_stale_reviews": true,
+            "require_code_owner_reviews": true,
+            "required_approving_review_count": 1
+          },
+          "restrictions": null
+        }
+        EOF
+          fi
+        done
+
+    - name: Set default branch to prod
+      run: |
+        curl -X PATCH \
+          -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME \
+          -d "{\"default_branch\": \"prod\"}"
+
+    - name: Delete main branch
+      run: |
+        curl -X DELETE \
+          -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/git/refs/heads/main
+
+    - name: Make repository private
+      run: |
+        curl -X PATCH \
+          -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME \
+          -d '{"private": true}'
