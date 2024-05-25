@@ -59,6 +59,11 @@ jobs:
             fi
           done
 
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"ref\": \"refs/heads/$DEFAULT_BRANCH\", \"sha\": \"$DEFAULT_BRANCH_SHA\"}" \
+              "https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/git/refs"
 
       
           README_SHA=$(curl -s -H "Authorization: token ${{ secrets.API_TOKEN }}" \
