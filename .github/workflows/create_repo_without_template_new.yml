@@ -17,8 +17,9 @@ jobs:
     - name: Set up variables
       id: setup-vars
       run: |
+        BRANCHES_REQ="qa,dev"
         echo "REPO_NAME=${{ github.event.inputs.repository_name }}" >> $GITHUB_ENV
-        echo "BRANCHES='qa,dev'" >> $GITHUB_ENV
+        echo "BRANCHES=$BRANCHES_REQ" >> $GITHUB_ENV
         echo "WORKFLOW_FILES='"demo_workflow_file1.yml,demo_workflow_file2.yml,demo_workflow_file3.yml"'" >> $GITHUB_ENV
 
     - name: Create repository
