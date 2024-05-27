@@ -72,12 +72,7 @@ jobs:
           EOF
           done
 
-    # - name: Get default branch SHA
-    #   id: get-sha
-    #   run: |
-    #     DEFAULT_BRANCH_SHA=$(git ls-remote https://github.com/${{ secrets.username }}/$REPO_NAME refs/heads/main | cut -f1)
-    #     echo "DEFAULT_BRANCH_SHA=${DEFAULT_BRANCH_SHA}" >> $GITHUB_ENV
-
+    
     - name: Create additional branches (QA & DEV)
       run: |
         DEFAULT_BRANCH_SHA=$(git ls-remote https://github.com/${{ secrets.username }}/$REPO_NAME refs/heads/main | cut -f1)
