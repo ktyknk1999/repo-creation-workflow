@@ -1,0 +1,9 @@
+name: caller Workflow
+on:
+  workflow_dispatch:
+jobs:
+  call-another-workflow:
+    uses: ktyknk1999/repo-creation-worflow/called-template/.github/workflows/called.yml@main
+    with:
+      input1: 'value1'
+      input2: 'value2'
