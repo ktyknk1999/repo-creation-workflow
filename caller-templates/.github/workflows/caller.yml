@@ -1,0 +1,12 @@
+name: Main Workflow
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  call-another-workflow:
+    uses: ./.github/workflows/called-workflow.yml
+    with:
+      input1: 'value1'
+      input2: 'value2'
