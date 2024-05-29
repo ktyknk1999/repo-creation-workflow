@@ -1,12 +1,9 @@
 name: Main Workflow
 on:
-  push:
-    branches:
-      - main
-
+  workflow-dispatch:
 jobs:
   call-another-workflow:
-    uses: ./.github/workflows/called-workflow.yml
+    uses: ktyknk1999/repo-creation-worflow/called-template/.github/workflows/called.yml
     with:
       input1: 'value1'
       input2: 'value2'
