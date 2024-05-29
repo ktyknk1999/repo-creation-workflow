@@ -1,0 +1,19 @@
+name: Reusable Workflow
+on:
+  workflow_call:
+    inputs:
+      input1:
+        type: string
+        required: true
+      input2:
+        type: string
+        required: false
+
+jobs:
+  example-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Print inputs
+        run: echo "Input1: ${{ inputs.input1 }} and Input2: ${{ inputs.input2 }}"
