@@ -45,7 +45,7 @@ jobs:
           -d @- <<EOF
         {
           "message": "Add README.md",
-          "content": "$(echo -n '# New Repo from Template' | base64)"
+          "content": "$(echo -n ${{ github.event.inputs.description }} | base64)"
         }
         EOF
     - name: Add CODEOWNERS to main branch
