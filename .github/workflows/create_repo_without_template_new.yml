@@ -59,7 +59,7 @@ jobs:
         
         curl -X PUT -H "Authorization: token ${{ secrets.API_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/.github/CODEOWNERS \
+          https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/CODEOWNERS \
           -d @- <<EOF
         {
           "message": "Add CODEOWNERS file",
