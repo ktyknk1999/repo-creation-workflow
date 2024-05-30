@@ -9,6 +9,9 @@ on:
       description:
         description: 'Description'
         required: true
+      codeowners:
+        description: 'Comma-separated list of paths and code owners in the format "path @owner"'
+        required: true
       
 jobs:
   create-repo:
@@ -22,6 +25,7 @@ jobs:
         echo "REPO_NAME=${{ github.event.inputs.repository_name }}" >> $GITHUB_ENV
         echo "BRANCHES=$BRANCHES_REQ" >> $GITHUB_ENV
         echo "WORKFLOW_FILES=$WORKFLOW_FILES_REQ" >> $GITHUB_ENV
+        echo "CODEOWNERS=${{ github.event.inputs.codeowners }}" >> $GITHUB_ENV
 
     - name: Create repository
       id: create-repo
@@ -42,6 +46,24 @@ jobs:
         {
           "message": "Add README.md",
           "content": "$(echo -n '# New Repo from Template' | base64)"
+        }
+        EOF
+    - name: Add CODEOWNERS to main branch
+      run: |
+        IFS=',' read -ra CODEOWNERS_ARRAY <<< "$CODEOWNERS"
+        CODEOWNERS_CONTENT=""
+        for entry in "${CODEOWNERS_ARRAY[@]}"; do
+          CODEOWNERS_CONTENT+="$entry\n"
+        done
+        CODEOWNERS_CONTENT=$(echo -e "$CODEOWNERS_CONTENT" | base64)
+        
+        curl -X PUT -H "Authorization: token ${{ secrets.API_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ secrets.username }}/$REPO_NAME/contents/.github/CODEOWNERS \
+          -d @- <<EOF
+        {
+          "message": "Add CODEOWNERS file",
+          "content": "$CODEOWNERS_CONTENT"
         }
         EOF
 
